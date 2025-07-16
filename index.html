@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Grid - Tienda de Ropa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .product-info {
+            padding: 25px;
+        }
+
+        .product-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            opacity: 0.9;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+        }
+
+        .nav-item:hover {
+            color: #667eea;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 5px;
+            fill: currentColor;
+        }
+
+        .nav-text {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .product-detail {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .product-detail.active {
+            display: block;
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .detail-info {
+            padding: 30px;
+        }
+
+        .detail-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .detail-price {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .detail-description {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .back-button {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Fashion</h1>
+        <p>Descubre las últimas tendencias en moda</p>
+    </div>
+
+    <div class="container">
+        <!-- Grid de Productos -->
+        <div id="products-grid" class="products-grid">
+            <div class="product-card" onclick="showProduct(1)">
+                <div class="product-image" style="background-image: url('./img/chaqueta_denin_clasica.jpg');">
+                    <div class="product-badge">Nuevo</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Chaqueta Denim Clásica</h3>
+                    <p class="product-description">Chaqueta de mezclilla vintage con corte moderno y detalles únicos.</p>
+                    <div class="product-price">$89.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(1)">Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card" onclick="showProduct(2)">
+                <div class="product-image" style="background-image: url('./img/vestido_floral_elegante.jpg');">
+                    <div class="product-badge">Oferta</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Vestido Floral Elegante</h3>
+                    <p class="product-description">Vestido midi con estampado floral perfecto para ocasiones especiales.</p>
+                    <div class="product-price">$124.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(2)">Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card" onclick="showProduct(3)">
+                <div class="product-image" style="background-image: url('./img/sueter_overzise_comodo.jpg');">
+                    <div class="product-badge">Popular</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Suéter Oversize Cómodo</h3>
+                    <p class="product-description">Suéter de lana suave con diseño oversize ideal para el invierno.</p>
+                    <div class="product-price">$67.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(3)">Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card" onclick="showProduct(4)">
+                <div class="product-image" style="background-image: url('./img/pantalon_cargo_urbano.jpg');">
+                    <div class="product-badge">Exclusivo</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Pantalón Cargo Urbano</h3>
+                    <p class="product-description">Pantalón cargo con múltiples bolsillos y estilo urbano contemporáneo.</p>
+                    <div class="product-price">$95.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(4)">Añadir al Carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalles de Productos -->
+        <div id="product-1" class="product-detail">
+            <div class="detail-image" style="background-image: url('./img/chaqueta_denin_clasica.jpg');"></div>
+            <div class="detail-info">
+                <h2 class="detail-name">Chaqueta Denim Clásica</h2>
+                <div class="detail-price">$89.99</div>
+                <p class="detail-description">
+                    Esta chaqueta de mezclilla combina el estilo clásico con toques modernos. Fabricada con denim de alta calidad, 
+                    presenta un corte favorecedor y detalles únicos que la hacen perfecta para cualquier ocasión casual. 
+                    Sus bolsillos funcionales y botones metálicos añaden un toque de sofisticación a tu look diario.
+                </p>
+                <button class="back-button" onclick="showGrid()">← Volver</button>
+                <button class="add-to-cart" onclick="addToCart(1)">Añadir al Carrito</button>
+            </div>
+        </div>
+
+        <div id="product-2" class="product-detail">
+            <div class="detail-image" style="background-image: url('./img/vestido_floral_elegante.jpg');"></div>
+            <div class="detail-info">
+                <h2 class="detail-name">Vestido Floral Elegante</h2>
+                <div class="detail-price">$124.99</div>
+                <p class="detail-description">
+                    Vestido midi con un hermoso estampado floral que evoca la frescura de la primavera. Su corte fluido y 
+                    elegante lo hace perfecto para cenas, eventos especiales o salidas románticas. La tela suave y transpirable 
+                    garantiza comodidad durante todo el día, mientras que su diseño atemporal nunca pasa de moda.
+                </p>
+                <button class="back-button" onclick="showGrid()">← Volver</button>
+                <button class="add-to-cart" onclick="addToCart(2)">Añadir al Carrito</button>
+            </div>
+        </div>
+
+        <div id="product-3" class="product-detail">
+            <div class="detail-image" style="background-image: url('./img/sueter_overzise_comodo.jpg');"></div>
+            <div class="detail-info">
+                <h2 class="detail-name">Suéter Oversize Cómodo</h2>
+                <div class="detail-price">$67.99</div>
+                <p class="detail-description">
+                    Suéter de lana merino extra suave con diseño oversize que abraza tu cuerpo con comodidad. Perfecto para 
+                    los días fríos, este suéter combina estilo y funcionalidad. Su corte relajado lo hace ideal para usar 
+                    con jeans, leggings o faldas. Disponible en varios colores para complementar tu guardarropa de invierno.
+                </p>
+                <button class="back-button" onclick="showGrid()">← Volver</button>
+                <button class="add-to-cart" onclick="addToCart(3)">Añadir al Carrito</button>
+            </div>
+        </div>
+
+        <div id="product-4" class="product-detail">
+            <div class="detail-image" style="background-image: url('./img/pantalon_cargo_urbano.jpg');"></div>
+            <div class="detail-info">
+                <h2 class="detail-name">Pantalón Cargo Urbano</h2>
+                <div class="detail-price">$95.99</div>
+                <p class="detail-description">
+                    Pantalón cargo que redefine el estilo urbano contemporáneo. Con múltiples bolsillos funcionales y 
+                    un corte moderno, es perfecto para quienes buscan comodidad sin sacrificar el estilo. Su tela resistente 
+                    y flexible se adapta a tu movimiento, mientras que los detalles en costuras añaden un toque distintivo 
+                    a tu look streetwear.
+                </p>
+                <button class="back-button" onclick="showGrid()">← Volver</button>
+                <button class="add-to-cart" onclick="addToCart(4)">Añadir al Carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menú de Navegación Inferior -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showGrid()">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span class="nav-text">Inicio</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <span class="nav-text">Categorías</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7Z"/>
+            </svg>
+            <span class="nav-text">Carrito</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span class="nav-text">Perfil</span>
+        </a>
+    </nav>
+
+    <script>
+        function showProduct(productId) {
+            // Ocultar grid
+            document.getElementById('products-grid').style.display = 'none';
+            
+            // Ocultar todos los detalles
+            const details = document.querySelectorAll('.product-detail');
+            details.forEach(detail => detail.classList.remove('active'));
+            
+            // Mostrar detalle específico
+            document.getElementById('product-' + productId).classList.add('active');
+        }
+
+        function showGrid() {
+            // Mostrar grid
+            document.getElementById('products-grid').style.display = 'grid';
+            
+            // Ocultar todos los detalles
+            const details = document.querySelectorAll('.product-detail');
+            details.forEach(detail => detail.classList.remove('active'));
+            
+            // Actualizar navegación
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            navItems[0].classList.add('active');
+        }
+
+        function addToCart(productId) {
+            const products = {
+                1: 'Chaqueta Denim Clásica',
+                2: 'Vestido Floral Elegante', 
+                3: 'Suéter Oversize Cómodo',
+                4: 'Pantalón Cargo Urbano'
+            };
+            
+            alert('¡' + products[productId] + ' añadido al carrito!');
+        }
+
+        // Navegación
+        document.querySelectorAll('.nav-item').forEach((item, index) => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remover clase active de todos
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                
+                // Añadir clase active al clickeado
+                item.classList.add('active');
+                
+                // Solo mostrar grid si es el botón de inicio
+                if (index === 0) {
+                    showGrid();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
